@@ -60,7 +60,7 @@ export default function CTAForm() {
     setIsSubmitting(true);
 
     try {
-      // Call our API route instead of Google Sheets directly
+      // Call our API route 
       const response = await fetch("/api/submit-form", {
         method: "POST",
         headers: {
