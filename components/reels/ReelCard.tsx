@@ -1,14 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Play, Eye, Heart } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 
 interface VideoCardProps {
   title: string;
   category: string;
   thumbnail: string;
-  videoUrl?: string; // Video URL for autoplay
+  videoUrl?: string;
   views?: string;
   likes?: string;
   variant?: "vertical" | "horizontal" | "featured";
@@ -35,12 +35,12 @@ export function VideoCard({
     featured: "aspect-[16/10]",
   }[variant];
 
-  // Autoplay on hover
   useEffect(() => {
-    if (videoRef.current) {
-      if (isHovered && videoUrl) {
-        videoRef.current.play();
-        setIsPlaying(true);
+    if (videoRef.current && videoUrl) {
+      if (isHovered) {
+        videoRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(() => setIsPlaying(false));
       } else {
         videoRef.current.pause();
         videoRef.current.currentTime = 0;
@@ -51,86 +51,60 @@ export function VideoCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay }}
+      transition={{ duration: 0.5, delay }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative ${aspectClass} rounded-2xl overflow-hidden group cursor-pointer hover-glow`}
+      className={`relative ${aspectClass} rounded-2xl overflow-hidden group cursor-pointer bg-black`}
     >
-      {/* Video or Thumbnail */}
-      {videoUrl ? (
+      {/* 1. Thumbnail/Poster (Z-index 0) */}
+      <div
+        className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
+        style={{ backgroundImage: `url(${thumbnail})` }}
+      />
+
+      {/* 2. Video Element (Z-index 10) */}
+      {videoUrl && (
         <video
           ref={videoRef}
           src={videoUrl}
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          poster={thumbnail}
-        />
-      ) : (
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-          style={{ backgroundImage: `url(${thumbnail})` }}
+          className={`absolute inset-0 w-full h-full object-cover z-10 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+      {/* 3. Gradient Overlay (Z-index 20) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-20" />
 
-      {/* Play button (hide when video is playing) */}
+      {/* 4. Simple Play Button (Z-index 30) */}
       {!isPlaying && (
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={isHovered ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="absolute inset-0 flex items-center justify-center"
-        >
-          <div className="w-16 h-16 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center glow-primary">
+        <div className="absolute inset-0 flex items-center justify-center z-30">
+          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/40">
             <Play className="w-6 h-6 text-primary-foreground ml-1" fill="currentColor" />
           </div>
-        </motion.div>
+        </div>
       )}
 
-      {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={isHovered ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-2"
-        >
-          <span className="text-xs uppercase tracking-wider text-primary font-medium">
-            {category}
-          </span>
-        </motion.div>
-
-        <h3 className="font-heading text-lg md:text-xl font-bold text-foreground mb-3 line-clamp-2">
+      {/* 5. Content (Z-index 40) */}
+      {/* <div className="absolute bottom-0 left-0 right-0 p-5 z-40">
+        <span className="text-xs uppercase tracking-widest text-primary font-bold mb-1 block">
+          {category}
+        </span>
+        <h3 className="text-lg font-bold text-white line-clamp-2">
           {title}
         </h3>
-
+        
         {(views || likes) && (
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            {views && (
-              <span className="flex items-center gap-1.5">
-                <Eye className="w-4 h-4" />
-                {views}
-              </span>
-            )}
-            {likes && (
-              <span className="flex items-center gap-1.5">
-                <Heart className="w-4 h-4" />
-                {likes}
-              </span>
-            )}
+          <div className="flex items-center gap-4 mt-3 text-sm text-white/70">
+            {views && <span className="flex items-center gap-1"><Eye size={14} /> {views}</span>}
+            {likes && <span className="flex items-center gap-1"><Heart size={14} /> {likes}</span>}
           </div>
         )}
-      </div>
-
-      {/* Border glow on hover */}
-      <div className="absolute inset-0 rounded-2xl border border-primary/0 group-hover:border-primary/30 transition-colors duration-300" />
+      </div> */}
     </motion.div>
   );
 }

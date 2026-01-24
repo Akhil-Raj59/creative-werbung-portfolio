@@ -10,7 +10,7 @@ const reelsData = [
     views: "1.2M",
     likes: "89K",
     thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=700&fit=crop",
-    videoUrl: "", // Senior se video URL lena hai
+    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", 
   },
   {
     title: "Street Food Documentary",
@@ -18,6 +18,7 @@ const reelsData = [
     views: "856K",
     likes: "62K",
     thumbnail: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=700&fit=crop",
+    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", 
   },
   {
     title: "Urban Dance Challenge",
@@ -25,6 +26,7 @@ const reelsData = [
     views: "2.1M",
     likes: "145K",
     thumbnail: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&h=700&fit=crop",
+    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", 
   },
   {
     title: "Skincare Routine Reveal",
@@ -46,6 +48,7 @@ const reelsData = [
     views: "1.5M",
     likes: "112K",
     thumbnail: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=700&fit=crop",
+    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   },
   {
     title: "Coffee Art Mastery",
@@ -104,12 +107,7 @@ export default function ReelsSection() {
           ))}
         </div>
 
-        {/* View all button */}
-        <div className="text-center mt-12">
-          <button className="px-8 py-3 rounded-full glass-card font-heading font-semibold hover:bg-muted/50 transition-all hover-glow">
-            View All 11 Reels →
-          </button>
-        </div>
+      
       </div>
     </section>
   );

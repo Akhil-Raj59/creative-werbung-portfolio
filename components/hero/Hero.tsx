@@ -98,13 +98,14 @@ export default function Hero() {
   </motion.span>
 </motion.a>
 
-            <motion.button
+            <motion.a
+              href="#featured"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-3 px-8 py-4 rounded-full glass-card font-heading font-semibold hover:bg-muted/50 transition-colors"
             >
-              View Portfolio
-            </motion.button>
+              View Featured Work
+            </motion.a>
           </motion.div>
         </div>
 

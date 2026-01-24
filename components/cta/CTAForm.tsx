@@ -3,6 +3,36 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Send, Mail, Phone, MapPin, Instagram, Linkedin, Youtube } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const formSchema = z.object({
+  fullName: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  projectType: z.string().min(1, "Please select a project type"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const projectTypes = [
   { value: "reels", label: "Reels & Short Content" },
@@ -15,43 +45,39 @@ const projectTypes = [
 export default function CTAForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    projectType: "",
-    description: "",
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      projectType: "",
+      description: "",
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
 
     try {
-      // Google Sheets Web App URL - Senior se milega
-      const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
-
-      const response = await fetch(GOOGLE_SHEET_URL, {
+      // Call our API route instead of Google Sheets directly
+      const response = await fetch("/api/submit-form", {
         method: "POST",
-        mode: "no-cors", // Important for Google Sheets
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...formData,
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify(data),
       });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Something went wrong");
+      }
 
       // Show success message
       setShowSuccess(true);
-      
-      // Reset form
-      setFormData({
-        fullName: "",
-        email: "",
-        projectType: "",
-        description: "",
-      });
+      form.reset();
 
       // Hide success message after 5 seconds
       setTimeout(() => setShowSuccess(false), 5000);
@@ -62,10 +88,6 @@ export default function CTAForm() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -99,34 +121,33 @@ export default function CTAForm() {
 
             {/* Contact Info */}
             <div className="space-y-4 pt-4">
-  {/* Fix: href aur className ko <a> ke andar daal diya */}
-  <a
-    href="mailto:hello@kreativewerbunglabs.com"
-    className="flex items-center gap-4 text-foreground hover:text-primary transition-colors group"
-  >
-    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-      <Mail className="w-5 h-5 text-primary" />
-    </div>
-    <span>hello@kreativewerbunglabs.com</span>
-  </a>
+              <a
+                href="mailto:hello@kreativewerbunglabs.com"
+                className="flex items-center gap-4 text-foreground hover:text-primary transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Mail className="w-5 h-5 text-primary" />
+                </div>
+                <span>hello@kreativewerbunglabs.com</span>
+              </a>
 
-  <a
-    href="tel:+919876543210"
-    className="flex items-center gap-4 text-foreground hover:text-primary transition-colors group"
-  >
-    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-      <Phone className="w-5 h-5 text-primary" />
-    </div>
-    <span>+91 98765 43210</span>
-  </a>
+              <a
+                href="tel:+919876543210"
+                className="flex items-center gap-4 text-foreground hover:text-primary transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Phone className="w-5 h-5 text-primary" />
+                </div>
+                <span>+91 98765 43210</span>
+              </a>
 
-  <div className="flex items-center gap-4 text-foreground">
-    <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
-      <MapPin className="w-5 h-5 text-secondary" />
-    </div>
-    <span>Delhi, India</span>
-  </div>
-</div>
+              <div className="flex items-center gap-4 text-foreground">
+                <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-secondary" />
+                </div>
+                <span>Delhi, India</span>
+              </div>
+            </div>
 
             {/* Social Links */}
             <div className="flex items-center gap-4 pt-4">
@@ -154,7 +175,7 @@ export default function CTAForm() {
             </div>
           </motion.div>
 
-          {/* Right Side - Form Card */}
+          {/* Right Side - Shadcn Form with Zod */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -176,104 +197,129 @@ export default function CTAForm() {
             {/* Glowing border effect */}
             <div className="absolute -inset-[1px] bg-gradient-to-br from-primary/40 via-transparent to-secondary/30 rounded-2xl blur-sm" />
             
-            <form
-              onSubmit={handleSubmit}
-              className="relative glass-card rounded-2xl p-8 space-y-6"
-            >
-              {/* Full Name */}
-              <div className="space-y-2">
-                <label htmlFor="fullName" className="text-sm font-medium text-muted-foreground">
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  type="text"
-                  required
-                  placeholder="John Doe"
-                  value={formData.fullName}
-                  onChange={(e) => handleChange("fullName", e.target.value)}
-                  className="w-full h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground/40"
-                />
-              </div>
+            <div className="relative glass-card rounded-2xl p-8">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  
+                  {/* Full Name */}
+                  <FormField
+                    control={form.control}
+                    name="fullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-muted-foreground">
+                          Full Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="John Doe"
+                            {...field}
+                            className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus-visible:ring-0 transition-colors"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              {/* Email */}
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-muted-foreground">
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  placeholder="john@example.com"
-                  value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                  className="w-full h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground/40"
-                />
-              </div>
+                  {/* Email */}
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-muted-foreground">
+                          Email Address
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="john@example.com"
+                            {...field}
+                            className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus-visible:ring-0 transition-colors"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              {/* Project Type */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">
-                  Project Type
-                </label>
-                <select
-                  value={formData.projectType}
-                  onChange={(e) => handleChange("projectType", e.target.value)}
-                  required
-                  className="w-full h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus:outline-none transition-colors"
-                >
-                  <option value="" disabled>Select project type</option>
-                  {projectTypes.map((type) => (
-                    <option key={type.value} value={type.value} className="bg-background">
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                  {/* Project Type */}
+                  <FormField
+                    control={form.control}
+                    name="projectType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-muted-foreground">
+                          Project Type
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus:ring-0">
+                              <SelectValue placeholder="Select project type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-card border-border">
+                            {projectTypes.map((type) => (
+                              <SelectItem key={type.value} value={type.value}>
+                                {type.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              {/* Project Brief */}
-              <div className="space-y-2">
-                <label htmlFor="description" className="text-sm font-medium text-muted-foreground">
-                  Project Brief
-                </label>
-                <textarea
-                  id="description"
-                  required
-                  placeholder="Tell us about your project..."
-                  value={formData.description}
-                  onChange={(e) => handleChange("description", e.target.value)}
-                  className="w-full min-h-[100px] bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground/40 resize-none"
-                />
-              </div>
+                  {/* Project Description */}
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-muted-foreground">
+                          Project Brief
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Tell us about your project..."
+                            {...field}
+                            className="min-h-[100px] bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus-visible:ring-0 transition-colors resize-none"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              {/* Submit Button */}
-              <div className="pt-6">
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 rounded-full bg-foreground text-background font-heading text-base font-semibold disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 transition-all duration-300 hover:bg-foreground/90"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="w-5 h-5 border-2 border-background/30 border-t-background rounded-full"
-                      />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      Send Project Request
-                      <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </motion.button>
-              </div>
-            </form>
+                  {/* Submit Button */}
+                  <div className="pt-6">
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full py-4 h-auto rounded-full bg-foreground text-background font-heading text-base font-semibold hover:bg-foreground/90"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            className="w-5 h-5 border-2 border-background/30 border-t-background rounded-full mr-3"
+                          />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          Send Project Request
+                          <Send className="w-4 h-4 ml-3" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </div>
           </motion.div>
         </div>
 
