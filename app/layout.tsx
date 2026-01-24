@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/header/Header";
 import { Space_Grotesk, Inter } from "next/font/google";
+import { Toaster } from "sonner";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       >
         <Header />
         {children}
+        <Toaster richColors />
       
       </body>
     </html>

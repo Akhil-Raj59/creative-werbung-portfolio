@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner"; // ⬅️ Sonner toast import
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -44,7 +45,6 @@ const projectTypes = [
 
 export default function CTAForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -59,35 +59,32 @@ export default function CTAForm() {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
 
-    try {
-      // Call our API route 
-      const response = await fetch("/api/submit-form", {
+    // Promise toast - Shows loading → success/error automatically! 🎯
+    toast.promise(
+      fetch("/api/submit-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Something went wrong");
+      }).then(async (response) => {
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || "Something went wrong");
+        }
+        
+        form.reset();
+        return result;
+      }),
+      {
+        loading: "Sending your message... 📤",
+        success: "Message sent! 🎬 We'll get back to you within 24 hours.",
+        error: "Failed to send. Please try again or email us directly.",
       }
+    );
 
-      // Show success message
-      setShowSuccess(true);
-      form.reset();
-
-      // Hide success message after 5 seconds
-      setTimeout(() => setShowSuccess(false), 5000);
-
-    } catch (error) {
-      console.error("Form submission error:", error);
-      alert("Something went wrong. Please try again or email us directly.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -183,17 +180,6 @@ export default function CTAForm() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            {/* Success Message */}
-            {showSuccess && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute -top-16 left-0 right-0 p-4 rounded-xl bg-primary text-primary-foreground text-center font-heading"
-              >
-                Message Sent! 🎬 We'll get back to you within 24 hours.
-              </motion.div>
-            )}
-
             {/* Glowing border effect */}
             <div className="absolute -inset-[1px] bg-gradient-to-br from-primary/40 via-transparent to-secondary/30 rounded-2xl blur-sm" />
             
