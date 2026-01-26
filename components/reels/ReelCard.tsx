@@ -59,13 +59,13 @@ export function VideoCard({
       onMouseLeave={() => setIsHovered(false)}
       className={`relative ${aspectClass} rounded-2xl overflow-hidden group cursor-pointer bg-black`}
     >
-      {/* 1. Thumbnail/Poster (Z-index 0) */}
+      
       <div
         className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
         style={{ backgroundImage: `url(${thumbnail})` }}
       />
 
-      {/* 2. Video Element (Z-index 10) */}
+      
       {videoUrl && (
         <video
           ref={videoRef}
@@ -77,10 +77,10 @@ export function VideoCard({
         />
       )}
 
-      {/* 3. Gradient Overlay (Z-index 20) */}
+      
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-20" />
 
-      {/* 4. Simple Play Button (Z-index 30) */}
+      
       {!isPlaying && (
         <div className="absolute inset-0 flex items-center justify-center z-30">
           <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/40">
@@ -89,7 +89,7 @@ export function VideoCard({
         </div>
       )}
 
-      {/* 5. Content (Z-index 40) */}
+      
       {/* <div className="absolute bottom-0 left-0 right-0 p-5 z-40">
         <span className="text-xs uppercase tracking-widest text-primary font-bold mb-1 block">
           {category}

@@ -1,10 +1,10 @@
-import AIVideosSection from "@/components/ai-videos/AIVideosSection";
-import FeaturedSection from "@/components/featured/FeaturedSection";
+import AIVideosSection from "@/components/AIVideosSection";
+import FeaturedSection from "@/components/FeaturedSection";
 import Hero from "@/components/hero/Hero";
-import LongFormSection from "@/components/long-form/LongFormSection";
-import MotionSection from "@/components/motion/MotionSection";
+import LongFormSection from "@/components/LongFormSection";
+import MotionSection from "@/components/MotionSection";
 import ReelsSection from "@/components/reels/ReelsSection";
-import CTAForm from "@/components/cta/CTAForm";
+import CTAForm from "@/components/CTAForm";
 
 export default function Home() {
   return (

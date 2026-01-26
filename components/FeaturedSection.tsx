@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { SectionHeader } from "../reels/SectionHeader";
+import { SectionHeader } from "./SectionHeader";
 import { Play, Award, ExternalLink, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
@@ -57,7 +57,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
   const modalVideoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Desktop: Play on hover
+  
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current && project.videoUrl) {
@@ -74,12 +74,12 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
     }
   };
 
-  // Open fullscreen video modal
+  
   const handlePlayClick = () => {
     setShowModal(true);
   };
 
-  // Close modal
+  
   const handleCloseModal = () => {
     setShowModal(false);
     if (modalVideoRef.current) {
@@ -87,7 +87,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
     }
   };
 
-  // Mobile: Play on scroll into view
+  
   useEffect(() => {
     if (!project.videoUrl) return;
 
@@ -121,7 +121,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
     };
   }, [project.videoUrl]);
 
-  // Auto-play modal video when opened
+  
   useEffect(() => {
     if (showModal && modalVideoRef.current) {
       modalVideoRef.current.play();

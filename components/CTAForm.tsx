@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner"; // ⬅️ Sonner toast import
+import { toast } from "sonner"; 
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -59,7 +59,7 @@ export default function CTAForm() {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
 
-    // Promise toast - Shows loading → success/error automatically! 🎯
+    
     toast.promise(
       fetch("/api/submit-form", {
         method: "POST",
@@ -89,14 +89,14 @@ export default function CTAForm() {
 
   return (
     <section id="contact" className="section-padding relative overflow-hidden">
-      {/* Background effects */}
+      
       <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
       <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
 
       <div className="container mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start max-w-6xl mx-auto">
           
-          {/* Left Side - Headline & Contact Info */}
+          
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -116,7 +116,7 @@ export default function CTAForm() {
               </p>
             </div>
 
-            {/* Contact Info */}
+          
             <div className="space-y-4 pt-4">
               <a
                 href="mailto:hello@kreativewerbunglabs.com"
@@ -146,7 +146,7 @@ export default function CTAForm() {
               </div>
             </div>
 
-            {/* Social Links */}
+            
             <div className="flex items-center gap-4 pt-4">
               <motion.a
                 href="#"
@@ -172,7 +172,7 @@ export default function CTAForm() {
             </div>
           </motion.div>
 
-          {/* Right Side - Shadcn Form with Zod */}
+          
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -180,14 +180,14 @@ export default function CTAForm() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            {/* Glowing border effect */}
+            
             <div className="absolute -inset-[1px] bg-gradient-to-br from-primary/40 via-transparent to-secondary/30 rounded-2xl blur-sm" />
             
             <div className="relative glass-card rounded-2xl p-8">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   
-                  {/* Full Name */}
+                  
                   <FormField
                     control={form.control}
                     name="fullName"
@@ -208,7 +208,7 @@ export default function CTAForm() {
                     )}
                   />
 
-                  {/* Email */}
+                  
                   <FormField
                     control={form.control}
                     name="email"
@@ -230,7 +230,7 @@ export default function CTAForm() {
                     )}
                   />
 
-                  {/* Project Type */}
+                  
                   <FormField
                     control={form.control}
                     name="projectType"
@@ -258,7 +258,7 @@ export default function CTAForm() {
                     )}
                   />
 
-                  {/* Project Description */}
+                  
                   <FormField
                     control={form.control}
                     name="description"
@@ -279,7 +279,7 @@ export default function CTAForm() {
                     )}
                   />
 
-                  {/* Submit Button */}
+                  
                   <div className="pt-6">
                     <Button
                       type="submit"
@@ -309,7 +309,7 @@ export default function CTAForm() {
           </motion.div>
         </div>
 
-        {/* Footer */}
+        
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -326,7 +326,7 @@ export default function CTAForm() {
           </div>
 
           <p className="text-sm text-muted-foreground">
-            © 2024 Kreative Werbung Labs. All rights reserved.
+            © 2026 Kreative Werbung Labs. All rights reserved.
           </p>
         </motion.div>
       </div>

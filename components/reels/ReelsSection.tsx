@@ -1,6 +1,6 @@
 "use client";
 
-import { SectionHeader } from "./SectionHeader";
+import { SectionHeader } from "../SectionHeader";
 import { VideoCard } from "./ReelCard";
 
 const reelsData = [

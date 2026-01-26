@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { SectionHeader } from "../reels/SectionHeader";
+import { SectionHeader } from "./SectionHeader";
 import { Play, Cpu, Zap, Bot } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
@@ -105,7 +105,7 @@ function AIVideoCard({ item, index }: { item: any; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Desktop: Play/Pause on hover (resume from where it stopped)
+  
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current && item.videoUrl) {
@@ -117,12 +117,12 @@ function AIVideoCard({ item, index }: { item: any; index: number }) {
   const handleMouseLeave = () => {
     setIsHovered(false);
     if (videoRef.current) {
-      videoRef.current.pause(); // Pause only, don't reset
+      videoRef.current.pause(); 
       setIsPlaying(false);
     }
   };
 
-  // Mobile: Play on scroll into view
+  
   useEffect(() => {
     if (!item.videoUrl) return;
 
@@ -130,14 +130,14 @@ function AIVideoCard({ item, index }: { item: any; index: number }) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && window.innerWidth < 768) {
-            // Mobile view
+            
             if (videoRef.current) {
               videoRef.current.play();
               setIsPlaying(true);
             }
           } else {
             if (videoRef.current && window.innerWidth < 768) {
-              videoRef.current.pause(); // Pause only
+              videoRef.current.pause(); 
               setIsPlaying(false);
             }
           }

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { SectionHeader } from "../reels/SectionHeader";
+import { SectionHeader } from "./SectionHeader";
 import { Play, Sparkles } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
@@ -53,7 +53,7 @@ function MotionCard({ item, index }: { item: any; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Desktop: Play on hover
+  
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current && item.videoUrl) {
@@ -71,7 +71,7 @@ function MotionCard({ item, index }: { item: any; index: number }) {
     }
   };
 
-  // Mobile: Play on scroll into view
+  
   useEffect(() => {
     if (!item.videoUrl) return;
 
@@ -79,7 +79,7 @@ function MotionCard({ item, index }: { item: any; index: number }) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && window.innerWidth < 768) {
-            // Mobile view
+            
             if (videoRef.current) {
               videoRef.current.play();
               setIsPlaying(true);
@@ -150,17 +150,7 @@ function MotionCard({ item, index }: { item: any; index: number }) {
         {/* Overlay with animated shapes */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-20" />
         
-        {/* Animated circles decoration */}
-        {/* <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-4 right-4 w-12 h-12 border border-primary/30 rounded-full z-20"
-        />
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute top-6 right-6 w-8 h-8 border border-primary/50 rounded-full z-20"
-        /> */}
+        
 
         {/* Play button (Hide on hover when playing) */}
         <motion.div

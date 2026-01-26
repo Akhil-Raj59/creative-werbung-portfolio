@@ -7,10 +7,10 @@ import { Stats } from "./Stats";
 export default function Hero() {
   return (
     <section className="relative mt-20 py-5 flex items-center justify-center overflow-hidden">
-      {/* Background gradient */}
+      
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted" />
       
-      {/* Animated grid lines */}
+      
       <div className="absolute inset-0 opacity-20">
         <div className="absolute inset-0" style={{
           backgroundImage: `
@@ -82,7 +82,7 @@ export default function Hero() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <motion.a
-  href="#reels" // Isse reels section par scroll hoga
+  href="#reels" 
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
   className="group flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-primary-foreground font-heading font-semibold glow-primary cursor-pointer"
@@ -109,26 +109,10 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Stats Component */}
+        
         <Stats />
       </div>
 
-      {/* Scroll indicator */}
-      {/* <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2 text-muted-foreground"
-        >
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <ArrowDown className="w-4 h-4" />
-        </motion.div>
-      </motion.div> */}
     </section>
   );
 }

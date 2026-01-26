@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { SectionHeader } from "../reels/SectionHeader";
+import { SectionHeader } from "./SectionHeader";
 import { Play, Clock, Calendar } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
@@ -55,7 +55,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Desktop: Play on hover
+  
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current && video.videoUrl) {
@@ -73,7 +73,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
     }
   };
 
-  // Mobile: Play on scroll into view
+  
   useEffect(() => {
     if (!video.videoUrl) return;
 
@@ -81,7 +81,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && window.innerWidth < 768) {
-            // Mobile view
+            
             if (videoRef.current) {
               videoRef.current.play();
               setIsPlaying(true);
@@ -109,7 +109,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
     };
   }, [video.videoUrl]);
 
-  // Get aspect ratio class
+  
   const getAspectRatioClass = (ratio: string) => {
     const ratioMap: { [key: string]: string } = {
       "16:9": "aspect-video",
