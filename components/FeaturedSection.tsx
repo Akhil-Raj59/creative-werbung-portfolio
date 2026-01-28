@@ -12,8 +12,8 @@ const featuredData = [
     description: "A groundbreaking campaign blending real athletes with AI-generated environments. This project pushed the boundaries of what's possible in sports advertising, creating an immersive experience that transported viewers into a futuristic running world.",
     awards: ["Cannes Lions Bronze", "D&AD Pencil"],
     services: ["Concept", "Direction", "Editing", "VFX", "Color Grading"],
-    thumbnail: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&h=600&fit=crop",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    thumbnail: "/assets/featured/thumbnails/featured-1.jpg",
+    videoUrl: "assets/featured/featured-1.mp4",
     stats: { views: "15M+", engagement: "8.2%", reach: "Global" },
   },
   {
@@ -22,8 +22,8 @@ const featuredData = [
     description: "Cinematic launch film for the new EQ electric vehicle series. Combining stunning automotive photography with ethereal motion graphics, we created a visual language that speaks to the future of sustainable luxury mobility.",
     awards: ["Webby Award", "Red Dot Design"],
     services: ["Creative Direction", "Cinematography", "Motion Design", "Sound Design"],
-    thumbnail: "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=1200&h=600&fit=crop",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    thumbnail: "/assets/featured/thumbnails/featured-2.jpg",
+    videoUrl: "assets/featured/featured-2.mp4",
     stats: { views: "22M+", engagement: "12.4%", reach: "45 Countries" },
   },
 ];

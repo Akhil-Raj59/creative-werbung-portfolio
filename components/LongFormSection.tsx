@@ -11,8 +11,8 @@ const longformData = [
     description: "A cinematic documentary exploring the creative process behind a leading tech startup's journey from garage to global.",
     duration: "12:45",
     date: "2024",
-    thumbnail: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&h=450&fit=crop",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    thumbnail: "/assets/long/thumbnails/long-2.jpg",
+    videoUrl: "assets/long/long-1.mp4",
     aspectRatio: "16:9",
   },
   {
@@ -20,8 +20,8 @@ const longformData = [
     description: "Exploring how modern fashion brands are revolutionizing the industry with eco-conscious production methods.",
     duration: "18:30",
     date: "2024",
-    thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    thumbnail: "/assets/long/thumbnails/long-1.jpg",
+    videoUrl: "assets/long/long-2.mp4",
     aspectRatio: "16:9",
   },
  

@@ -5,81 +5,57 @@ import { SectionHeader } from "./SectionHeader";
 import { Play, Cpu, Zap, Bot } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
-const aiData = [
+type AIVideoItem = {
+  title: string;
+  description: string;
+  icon: any;
+  thumbnail: string;
+  videoUrl: string;
+};
+
+const aiData: AIVideoItem[] = [
   {
     title: "AI-Generated Product Demo",
     description: "Fully AI-crafted product visualization",
     icon: Cpu,
-    thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    thumbnail: "/assets/ai/thumbnails/thumbnail-1.jpg",
+    videoUrl: "/assets/ai/ai-1.mp4",
   },
   {
     title: "Neural Style Transfer Art",
     description: "Artistic video transformation using AI",
     icon: Zap,
-    thumbnail: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&h=400&fit=crop",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    thumbnail: "/assets/ai/thumbnails/thumbnail-reel.jpg",
+    videoUrl: "/assets/ai/ai-reel.mp4", // 👈 REEL
   },
   {
     title: "AI Avatar Presentation",
     description: "Digital human spokesperson creation",
     icon: Bot,
-    thumbnail: "https://images.unsplash.com/photo-1676299081847-824916de030a?w=600&h=400&fit=crop",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    thumbnail: "/assets/ai/thumbnails/thumbnail-3.jpg",
+    videoUrl: "/assets/ai/ai-3.mp4",
   },
   {
     title: "Generative Motion Design",
     description: "AI-driven abstract animations",
     icon: Cpu,
-    thumbnail: "https://images.unsplash.com/photo-1614851099511-773084f6911d?w=600&h=400&fit=crop",
-    videoUrl: "",
+    thumbnail: "/assets/ai/thumbnails/thumbnail-2.jpg",
+    videoUrl: "/assets/ai/ai-2.mp4",
   },
   {
     title: "Deep Learning VFX",
     description: "AI-enhanced visual effects",
     icon: Zap,
-    thumbnail: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop",
-    videoUrl: "",
+    thumbnail: "/assets/ai/thumbnails/thumbnail-4.jpg",
+    videoUrl: "/assets/ai/ai-4.mp4",
   },
 ];
 
 export default function AIVideosSection() {
   return (
     <section id="ai" className="section-padding relative overflow-hidden">
-      {/* AI-themed background effects */}
+      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-accent/5 to-background" />
-      
-      {/* Holographic grid */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, hsl(var(--accent) / 0.3) 1px, transparent 1px),
-              linear-gradient(to bottom, hsl(var(--accent) / 0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-          }}
-        />
-      </div>
-
-      {/* Floating orbs */}
-      <motion.div
-        animate={{ 
-          y: [0, -30, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 6, repeat: Infinity }}
-        className="absolute top-1/4 left-1/4 w-64 h-64 bg-accent/10 rounded-full blur-[80px]"
-      />
-      <motion.div
-        animate={{ 
-          y: [0, 30, 0],
-          scale: [1.1, 1, 1.1],
-        }}
-        transition={{ duration: 8, repeat: Infinity }}
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px]"
-      />
 
       <div className="container mx-auto relative z-10">
         <SectionHeader
@@ -99,63 +75,60 @@ export default function AIVideosSection() {
   );
 }
 
-function AIVideoCard({ item, index }: { item: any; index: number }) {
+function AIVideoCard({
+  item,
+  index,
+}: {
+  item: AIVideoItem;
+  index: number;
+}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  
+  const isReel = item.videoUrl.includes("reel"); // ✅ ONLY reel = 9:16
+
+  const playVideo = () => {
+    videoRef.current?.play().catch(() => {});
+    setIsPlaying(true);
+  };
+
+  const pauseVideo = () => {
+    if (!videoRef.current) return;
+    videoRef.current.pause();
+    setIsPlaying(false);
+  };
+
+  // Desktop hover
   const handleMouseEnter = () => {
+    if (window.innerWidth < 768) return;
     setIsHovered(true);
-    if (videoRef.current && item.videoUrl) {
-      videoRef.current.play();
-      setIsPlaying(true);
-    }
+    playVideo();
   };
 
   const handleMouseLeave = () => {
+    if (window.innerWidth < 768) return;
     setIsHovered(false);
-    if (videoRef.current) {
-      videoRef.current.pause(); 
-      setIsPlaying(false);
-    }
+    pauseVideo();
   };
 
-  
+  // Mobile scroll autoplay
   useEffect(() => {
-    if (!item.videoUrl) return;
+    if (!containerRef.current) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && window.innerWidth < 768) {
-            
-            if (videoRef.current) {
-              videoRef.current.play();
-              setIsPlaying(true);
-            }
-          } else {
-            if (videoRef.current && window.innerWidth < 768) {
-              videoRef.current.pause(); 
-              setIsPlaying(false);
-            }
-          }
-        });
+      ([entry]) => {
+        if (window.innerWidth >= 768) return;
+        entry.isIntersecting ? playVideo() : pauseVideo();
       },
       { threshold: 0.5 }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, [item.videoUrl]);
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <motion.div
@@ -165,17 +138,23 @@ function AIVideoCard({ item, index }: { item: any; index: number }) {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={`group relative ${
-        index === 0 ? "md:col-span-2 lg:col-span-2" : ""
+        index === 0 && !isReel ? "md:col-span-2 lg:col-span-2" : ""
       }`}
     >
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={`relative ${
-          index === 0 ? "aspect-[2/1]" : "aspect-[3/2]"
-        } rounded-2xl overflow-hidden cursor-pointer bg-black`}
+        className={`relative rounded-2xl overflow-hidden cursor-pointer bg-black
+          ${
+            isReel
+              ? "aspect-[9/10]" // 🎯 REEL ONLY
+              : index === 0
+              ? "aspect-[2/1]"
+              : "aspect-[3/2]"
+          }
+        `}
       >
-        {/* Thumbnail (Show when not playing) */}
+        {/* Thumbnail */}
         {!isPlaying && (
           <motion.div
             initial={{ scale: 1 }}
@@ -186,27 +165,23 @@ function AIVideoCard({ item, index }: { item: any; index: number }) {
           />
         )}
 
-        {/* Video Element */}
-        {item.videoUrl && (
-          <video
-            ref={videoRef}
-            src={item.videoUrl}
-            loop
-            muted
-            playsInline
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
-              isHovered ? "scale-105" : "scale-100"
-            }`}
-          />
-        )}
+        {/* Video */}
+        <video
+          ref={videoRef}
+          src={item.videoUrl}
+          loop
+          muted
+          playsInline
+          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
+            isHovered ? "scale-105" : "scale-100"
+          }`}
+        />
 
-        {/* Glitch overlay */}
+        {/* Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent z-20" />
-        
-        {/* Scanlines effect */}
         <div className="absolute inset-0 scanline opacity-0 group-hover:opacity-100 transition-opacity z-20" />
 
-        {/* Content overlay */}
+        {/* Content */}
         <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
           <div className="flex justify-between items-start">
             <motion.div
@@ -232,21 +207,18 @@ function AIVideoCard({ item, index }: { item: any; index: number }) {
           </div>
         </div>
 
-        {/* Center play button (Hide on hover when playing) */}
+        {/* Play Button */}
         <motion.div
-          initial={{ opacity: 1 }}
-          animate={{
-            opacity: isPlaying && isHovered ? 0 : 1,
-          }}
+          animate={{ opacity: isPlaying && isHovered ? 0 : 1 }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 flex items-center justify-center z-40"
         >
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            className="w-16 h-16 rounded-full bg-accent/90 flex items-center justify-center animate-pulse-glow"
-          >
-            <Play className="w-6 h-6 text-foreground ml-1" fill="currentColor" />
-          </motion.div>
+          <div className="w-16 h-16 rounded-full bg-accent/90 flex items-center justify-center animate-pulse-glow">
+            <Play
+              className="w-6 h-6 text-foreground ml-1"
+              fill="currentColor"
+            />
+          </div>
         </motion.div>
       </div>
     </motion.div>
