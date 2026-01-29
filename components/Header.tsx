@@ -6,8 +6,8 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { label: "Reels", href: "#reels" },
-  { label: "Long-form", href: "#longform" },
   { label: "Motion", href: "#motion" },
+  { label: "Long-form", href: "#longform" },
   { label: "AI Videos", href: "#ai" },
   { label: "Featured", href: "#featured" },
 ];

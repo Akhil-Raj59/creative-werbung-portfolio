@@ -56,7 +56,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Desktop hover
+  
   const handleMouseEnter = () => {
     if (window.innerWidth < 768) return;
     setIsHovered(true);
@@ -73,7 +73,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
     setIsPlaying(false);
   };
 
-  // Mobile scroll autoplay
+  
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -168,7 +168,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
             >
               <div className="w-20 h-20 rounded-full glass-card bg-primary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Play
-                  className="w-8 h-8 text-foreground ml-1"
+                  className="w-8 h-8 text-primary-foreground ml-1"
                   fill="currentColor"
                 />
               </div>
