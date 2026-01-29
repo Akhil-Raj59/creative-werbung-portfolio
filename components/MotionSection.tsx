@@ -31,7 +31,6 @@ const motionData: MotionItem[] = [
     thumbnail: "/assets/motion/thumbnails/motion-3.jpg",
     videoUrl: "/assets/motion/motion-3.mp4",
   },
-  
 ];
 
 export default function MotionSection() {
@@ -58,7 +57,13 @@ export default function MotionSection() {
   );
 }
 
-function MotionCard({ item, index }: { item: MotionItem; index: number }) {
+function MotionCard({
+  item,
+  index,
+}: {
+  item: MotionItem;
+  index: number;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -77,7 +82,7 @@ function MotionCard({ item, index }: { item: MotionItem; index: number }) {
     setIsPlaying(false);
   };
 
-  // Desktop hover
+
   const handleMouseEnter = () => {
     if (window.innerWidth < 768) return;
     setIsHovered(true);
@@ -90,14 +95,13 @@ function MotionCard({ item, index }: { item: MotionItem; index: number }) {
     resetVideo();
   };
 
-  // Mobile scroll autoplay
+  
   useEffect(() => {
     if (!containerRef.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (window.innerWidth >= 768) return;
-
         entry.isIntersecting ? playVideo() : resetVideo();
       },
       { threshold: 0.6 }
@@ -116,58 +120,58 @@ function MotionCard({ item, index }: { item: MotionItem; index: number }) {
       transition={{ duration: 0.6, delay: index * 0.12 }}
       className="group"
     >
-      {/* 9:16 CARD */}
+      
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative aspect-[9/13] rounded-2xl overflow-hidden bg-black cursor-pointer hover-glow mb-5"
+        className="
+          relative aspect-[9/13] cursor-pointer mb-5
+          transition-all duration-500 ease-out
+          group-hover:scale-[1.06]
+          group-hover:shadow-[0_0_60px_rgba(99,102,241,0.55)]
+        "
       >
-        {/* Thumbnail */}
-        {!isPlaying && (
-          <div
-            className="absolute inset-0 z-10 bg-cover bg-center"
-            style={{ backgroundImage: `url(${item.thumbnail})` }}
-          />
-        )}
-
-        {/* Video */}
-        <video
-          ref={videoRef}
-          src={item.videoUrl}
-          muted
-          loop
-          playsInline
-          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
-            isHovered ? "scale-105" : "scale-100"
-          }`}
-        />
-
-        {/* Overlay */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-
-        {/* Play button */}
-        <motion.div
-          animate={{ opacity: isPlaying ? 0 : 1 }}
-          transition={{ duration: 0.25 }}
-          className="absolute inset-0 z-30 flex items-center justify-center"
-        >
-          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center glow-primary">
-            <Play
-              className="w-6 h-6 text-primary-foreground ml-1"
-              fill="currentColor"
+        
+        <div className="absolute inset-0 rounded-2xl overflow-hidden bg-black">
+          
+          {!isPlaying && (
+            <div
+              className="absolute inset-0 z-10 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              style={{ backgroundImage: `url(${item.thumbnail})` }}
             />
-          </div>
-        </motion.div>
+          )}
 
-        {/* Scan line */}
-        <motion.div
-          animate={{ y: ["100%", "-100%"] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-x-0 h-1/3 z-20 bg-gradient-to-b from-primary/5 via-primary/10 to-transparent opacity-0 group-hover:opacity-100"
-        />
+          
+          <video
+            ref={videoRef}
+            src={item.videoUrl}
+            loop
+            playsInline
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
+              isHovered ? "scale-105" : "scale-100"
+            }`}
+          />
+
+          
+          <div className="absolute inset-0 z-20 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+
+          
+          <motion.div
+            animate={{ opacity: isPlaying ? 0 : 1 }}
+            transition={{ duration: 0.25 }}
+            className="absolute inset-0 z-30 flex items-center justify-center"
+          >
+            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/40">
+              <Play
+                className="w-6 h-6 text-primary-foreground ml-1"
+                fill="currentColor"
+              />
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      {/* Text */}
+      
       <div className="flex items-start justify-between">
         <div>
           <h3 className="font-heading text-lg font-bold mb-1 group-hover:text-primary transition-colors">

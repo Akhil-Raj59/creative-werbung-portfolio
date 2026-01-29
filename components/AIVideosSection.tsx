@@ -54,7 +54,7 @@ const aiData: AIVideoItem[] = [
 export default function AIVideosSection() {
   return (
     <section id="ai" className="section-padding relative overflow-hidden">
-      {/* Background */}
+    
       <div className="absolute inset-0 bg-gradient-to-b from-background via-accent/5 to-background" />
 
       <div className="container mx-auto relative z-10">
@@ -88,7 +88,7 @@ function AIVideoCard({
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const isReel = item.videoUrl.includes("reel"); // ✅ ONLY reel = 9:16
+  const isReel = item.videoUrl.includes("reel"); 
 
   const playVideo = () => {
     videoRef.current?.play().catch(() => {});
@@ -101,7 +101,7 @@ function AIVideoCard({
     setIsPlaying(false);
   };
 
-  // Desktop hover
+  
   const handleMouseEnter = () => {
     if (window.innerWidth < 768) return;
     setIsHovered(true);
@@ -114,7 +114,7 @@ function AIVideoCard({
     pauseVideo();
   };
 
-  // Mobile scroll autoplay
+  
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -158,7 +158,7 @@ function AIVideoCard({
           }
         `}
       >
-        {/* Thumbnail */}
+      
         {!isPlaying && (
           <motion.div
             initial={{ scale: 1 }}
@@ -169,36 +169,29 @@ function AIVideoCard({
           />
         )}
 
-        {/* Video */}
+        
         <video
           ref={videoRef}
           src={item.videoUrl}
           loop
-          muted
           playsInline
           className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
             isHovered ? "scale-105" : "scale-100"
           }`}
         />
 
-        {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent z-20" />
-        <div className="absolute inset-0 scanline opacity-0 group-hover:opacity-100 transition-opacity z-20" />
+       
 
-        {/* Content */}
+        
         <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
           <div className="flex justify-between items-start">
-            <motion.div
+            {/* <motion.div
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.5 }}
               className="w-12 h-12 rounded-xl glass-card flex items-center justify-center"
             >
-              <item.icon className="w-6 h-6 text-accent" />
-            </motion.div>
-
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-accent/20 text-accent border border-accent/30">
-              AI Enhanced
-            </span>
+              
+            </motion.div> */}
           </div>
 
           <div>
@@ -211,13 +204,13 @@ function AIVideoCard({
           </div>
         </div>
 
-        {/* Play Button */}
+        
         <motion.div
           animate={{ opacity: isPlaying && isHovered ? 0 : 1 }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 flex items-center justify-center z-40"
         >
-          <div className="w-16 h-16 rounded-full bg-accent/90 flex items-center justify-center animate-pulse-glow">
+          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center animate-pulse-glow">
             <Play
               className="w-6 h-6 text-foreground ml-1"
               fill="currentColor"

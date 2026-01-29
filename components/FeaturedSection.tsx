@@ -138,14 +138,14 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
         transition={{ duration: 0.8 }}
         className="relative"
       >
-        {/* Large hero image/video */}
+        
         <div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={handlePlayClick}
           className="relative aspect-[21/9] rounded-3xl overflow-hidden mb-10 group cursor-pointer bg-black"
         >
-          {/* Thumbnail (Show when not playing) */}
+          
           {!isPlaying && (
             <motion.div
               initial={{ scale: 1 }}
@@ -156,13 +156,12 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
             />
           )}
 
-          {/* Video Element */}
+          
           {project.videoUrl && (
             <video
               ref={videoRef}
               src={project.videoUrl}
               loop
-              muted
               playsInline
               className={`absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ${
                 isHovered ? "scale-105" : "scale-100"
@@ -172,7 +171,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
 
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent z-20" />
           
-          {/* Play button (Hide on hover when playing) */}
+          
           <motion.div
             initial={{ opacity: 1 }}
             animate={{
@@ -183,7 +182,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
           >
             <motion.div
               whileHover={{ scale: 1.1 }}
-              className="w-24 h-24 rounded-full glass-card flex items-center justify-center group-hover:bg-secondary/30 transition-colors glow-primary"
+              className="w-24 h-24 rounded-full glass-card bg-primary flex items-center justify-center group-hover:bg-secondary/30 transition-colors glow-primary"
             >
               <Play className="w-10 h-10 text-foreground ml-1" fill="currentColor" />
             </motion.div>
@@ -192,9 +191,9 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
          
         </div>
 
-        {/* Content grid */}
+      
         <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-          {/* Main info */}
+          
           <div className="md:col-span-2 space-y-6">
             <div>
               <span className="text-secondary font-medium text-sm uppercase tracking-wider">
@@ -214,7 +213,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
             
           </div>
 
-          {/* Stats */}
+          
           <div className="space-y-6 text-secondary">
             <h4 className="font-heading text-lg font-semibold text-muted-foreground">
               Project Impact
@@ -243,7 +242,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
         </div>
       </motion.div>
 
-      {/* Fullscreen Video Modal */}
+      
       {showModal && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -252,7 +251,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
           onClick={handleCloseModal}
         >
-          {/* Close button */}
+          
           <button
             onClick={handleCloseModal}
             className="absolute top-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-muted/50 transition-colors z-10"
@@ -260,7 +259,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
             <X className="w-6 h-6" />
           </button>
 
-          {/* Video player */}
+          
           <motion.div
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}

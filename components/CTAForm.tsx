@@ -200,7 +200,7 @@ export default function CTAForm() {
                           <Input
                             placeholder="John Doe"
                             {...field}
-                            className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus-visible:ring-0 transition-colors"
+                            className="h-12 bg-transparent border-0 border-b  rounded-none px-0 border-primary focus-visible:ring-0 transition-colors"
                           />
                         </FormControl>
                         <FormMessage />
@@ -222,7 +222,7 @@ export default function CTAForm() {
                             type="email"
                             placeholder="john@example.com"
                             {...field}
-                            className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus-visible:ring-0 transition-colors"
+                            className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 border-primary focus-visible:ring-0 transition-colors"
                           />
                         </FormControl>
                         <FormMessage />
@@ -241,7 +241,7 @@ export default function CTAForm() {
                         </FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus:ring-0">
+                            <SelectTrigger className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 border-primary focus:ring-0">
                               <SelectValue placeholder="Select project type" />
                             </SelectTrigger>
                           </FormControl>
@@ -271,7 +271,7 @@ export default function CTAForm() {
                           <Textarea
                             placeholder="Tell us about your project..."
                             {...field}
-                            className="min-h-[100px] bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus:border-primary focus-visible:ring-0 transition-colors resize-none"
+                            className="min-h-[100px] bg-transparent border-0 border-b border-border/50 rounded-none px-0 border-primary focus-visible:ring-0 transition-colors resize-none"
                           />
                         </FormControl>
                         <FormMessage />

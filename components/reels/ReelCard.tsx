@@ -36,16 +36,17 @@ export function VideoCard({
   }[variant];
 
   useEffect(() => {
-    if (videoRef.current && videoUrl) {
-      if (isHovered) {
-        videoRef.current.play()
-          .then(() => setIsPlaying(true))
-          .catch(() => setIsPlaying(false));
-      } else {
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0;
-        setIsPlaying(false);
-      }
+    if (!videoRef.current || !videoUrl) return;
+
+    if (isHovered && window.innerWidth >= 768) {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
+    } else {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+      setIsPlaying(false);
     }
   }, [isHovered, videoUrl]);
 
@@ -54,57 +55,82 @@ export function VideoCard({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay }}
+      transition={{ duration: 0.45, delay }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative ${aspectClass} rounded-2xl overflow-hidden group cursor-pointer bg-black`}
+      className={`relative ${aspectClass} group cursor-pointer
+        transition-all duration-500 ease-out
+        hover:scale-[1.06]
+        hover:shadow-[0_0_60px_rgba(99,102,241,0.55)]
+      `}
     >
       
-      <div
-        className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
-        style={{ backgroundImage: `url(${thumbnail})` }}
-      />
+      <div className="absolute inset-0 rounded-2xl overflow-hidden bg-black">
 
       
-      {videoUrl && (
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          muted
-          loop
-          playsInline
-          className={`absolute inset-0 w-full h-full object-cover z-10 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
+        <div
+          className={`absolute inset-0 bg-cover bg-center transition-transform duration-700
+            ${isPlaying ? "opacity-0" : "opacity-100"}
+            group-hover:scale-110
+          `}
+          style={{ backgroundImage: `url(${thumbnail})` }}
         />
-      )}
 
       
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-20" />
+        {videoUrl && (
+          <video
+            ref={videoRef}
+            src={videoUrl}
+            loop
+            playsInline
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500
+              ${isPlaying ? "opacity-100" : "opacity-0"}
+            `}
+          />
+        )}
 
-      
-      {!isPlaying && (
-        <div className="absolute inset-0 flex items-center justify-center z-30">
-          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/40">
-            <Play className="w-6 h-6 text-primary-foreground ml-1" fill="currentColor" />
-          </div>
-        </div>
-      )}
-
-      
-      {/* <div className="absolute bottom-0 left-0 right-0 p-5 z-40">
-        <span className="text-xs uppercase tracking-widest text-primary font-bold mb-1 block">
-          {category}
-        </span>
-        <h3 className="text-lg font-bold text-white line-clamp-2">
-          {title}
-        </h3>
         
-        {(views || likes) && (
-          <div className="flex items-center gap-4 mt-3 text-sm text-white/70">
-            {views && <span className="flex items-center gap-1"><Eye size={14} /> {views}</span>}
-            {likes && <span className="flex items-center gap-1"><Heart size={14} /> {likes}</span>}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+
+      
+        {!isPlaying && (
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center
+              shadow-lg shadow-primary/40 animate-pulse">
+              <Play
+                className="w-5 h-5 text-primary-foreground ml-0.5"
+                fill="currentColor"
+              />
+            </div>
           </div>
         )}
-      </div> */}
+
+        
+        <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
+          <span className="text-[11px] uppercase tracking-widest text-primary font-semibold">
+            {category}
+          </span>
+
+          <h3 className="text-sm font-bold text-white mt-1 line-clamp-2">
+            {title}
+          </h3>
+
+          {/* {(views || likes) && (
+            <div className="flex items-center gap-3 mt-2 text-xs text-white/70">
+              {views && (
+                <span className="flex items-center gap-1">
+                  <Eye size={12} /> {views}
+                </span>
+              )}
+              {likes && (
+                <span className="flex items-center gap-1">
+                  <Heart size={12} /> {likes}
+                </span>
+              )}
+            </div>
+          )} */}
+        </div>
+      </div>
     </motion.div>
   );
 }

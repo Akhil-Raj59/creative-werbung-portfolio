@@ -2,30 +2,30 @@
 
 import { motion } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
-import { Play, Clock, Calendar } from "lucide-react";
+import { Play } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 const longformData = [
   {
     title: "Behind The Brand: Journey of Innovation",
-    description: "A cinematic documentary exploring the creative process behind a leading tech startup's journey from garage to global.",
+    description:
+      "A cinematic documentary exploring the creative process behind a leading tech startup's journey from garage to global.",
     duration: "12:45",
     date: "2024",
     thumbnail: "/assets/long/thumbnails/long-2.jpg",
-    videoUrl: "assets/long/long-1.mp4",
+    videoUrl: "/assets/long/long-1.mp4",
     aspectRatio: "16:9",
   },
   {
     title: "The Art of Sustainable Fashion",
-    description: "Exploring how modern fashion brands are revolutionizing the industry with eco-conscious production methods.",
+    description:
+      "Exploring how modern fashion brands are revolutionizing the industry with eco-conscious production methods.",
     duration: "18:30",
     date: "2024",
     thumbnail: "/assets/long/thumbnails/long-1.jpg",
-    videoUrl: "assets/long/long-2.mp4",
+    videoUrl: "/assets/long/long-2.mp4",
     aspectRatio: "16:9",
   },
- 
-  
 ];
 
 export default function LongFormSection() {
@@ -39,7 +39,7 @@ export default function LongFormSection() {
           description="Story-driven videos that build emotional connections. From documentaries to brand films, we create narratives that resonate."
         />
 
-        <div className="space-y-8">
+        <div className="space-y-10">
           {longformData.map((video, index) => (
             <LongFormCard key={video.title} video={video} index={index} />
           ))}
@@ -50,81 +50,69 @@ export default function LongFormSection() {
 }
 
 function LongFormCard({ video, index }: { video: any; index: number }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Desktop hover
   const handleMouseEnter = () => {
+    if (window.innerWidth < 768) return;
     setIsHovered(true);
-    if (videoRef.current && video.videoUrl) {
-      videoRef.current.play();
-      setIsPlaying(true);
-    }
+    videoRef.current?.play().catch(() => {});
+    setIsPlaying(true);
   };
 
   const handleMouseLeave = () => {
+    if (window.innerWidth < 768) return;
     setIsHovered(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-      setIsPlaying(false);
-    }
+    if (!videoRef.current) return;
+    videoRef.current.pause();
+    videoRef.current.currentTime = 0;
+    setIsPlaying(false);
   };
 
-  
+  // Mobile scroll autoplay
   useEffect(() => {
-    if (!video.videoUrl) return;
+    if (!containerRef.current) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && window.innerWidth < 768) {
-            
-            if (videoRef.current) {
-              videoRef.current.play();
-              setIsPlaying(true);
-            }
-          } else {
-            if (videoRef.current && window.innerWidth < 768) {
-              videoRef.current.pause();
-              videoRef.current.currentTime = 0;
-              setIsPlaying(false);
-            }
-          }
-        });
+      ([entry]) => {
+        if (window.innerWidth >= 768) return;
+
+        if (entry.isIntersecting) {
+          videoRef.current?.play().catch(() => {});
+          setIsPlaying(true);
+        } else {
+          if (!videoRef.current) return;
+          videoRef.current.pause();
+          videoRef.current.currentTime = 0;
+          setIsPlaying(false);
+        }
       },
       { threshold: 0.5 }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, [video.videoUrl]);
-
-  
   const getAspectRatioClass = (ratio: string) => {
-    const ratioMap: { [key: string]: string } = {
+    const map: Record<string, string> = {
       "16:9": "aspect-video",
       "21:9": "aspect-[21/9]",
       "4:3": "aspect-[4/3]",
       "9:16": "aspect-[9/16]",
       "1:1": "aspect-square",
     };
-    return ratioMap[ratio] || "aspect-video";
+    return map[ratio] || "aspect-video";
   };
 
   return (
     <motion.div
       ref={containerRef}
-      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+      initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, delay: index * 0.1 }}
@@ -132,70 +120,69 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
         index % 2 === 1 ? "md:flex-row-reverse" : ""
       }`}
     >
-      {/* Video Player */}
-      <div className={`relative group ${index % 2 === 1 ? "md:order-2" : ""}`}>
+      
+      <div className={`group ${index % 2 === 1 ? "md:order-2" : ""}`}>
         <div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className={`relative ${getAspectRatioClass(video.aspectRatio)} rounded-2xl overflow-hidden hover-glow cursor-pointer bg-black`}
+          className={`
+            relative cursor-pointer
+            transition-all duration-500 ease-out
+            group-hover:scale-[1.05]
+            group-hover:shadow-[0_0_70px_rgba(99,102,241,0.55)]
+          `}
         >
-          {/* Thumbnail (Show when not playing) */}
-          {!isPlaying && (
-            <motion.div
-              initial={{ scale: 1 }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.6 }}
-              className="absolute inset-0 bg-cover bg-center z-10"
-              style={{ backgroundImage: `url(${video.thumbnail})` }}
-            />
-          )}
+          
+          <div
+            className={`relative ${getAspectRatioClass(
+              video.aspectRatio
+            )} rounded-2xl overflow-hidden bg-black`}
+          >
+            
+            {!isPlaying && (
+              <div
+                className="absolute inset-0 z-10 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                style={{ backgroundImage: `url(${video.thumbnail})` }}
+              />
+            )}
 
-          {/* Video Element */}
-          {video.videoUrl && (
+            
             <video
               ref={videoRef}
               src={video.videoUrl}
               loop
-              muted
               playsInline
               className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
                 isHovered ? "scale-105" : "scale-100"
               }`}
             />
-          )}
 
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-20" />
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-20" />
 
-          {/* Play Button (Hide on hover when playing) */}
-          <motion.div
-            initial={{ opacity: 1 }}
-            animate={{
-              opacity: isPlaying && isHovered ? 0 : 1,
-            }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 flex items-center justify-center z-30"
-          >
+            
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="w-20 h-20 rounded-full glass-card flex items-center justify-center group-hover:bg-primary/20 transition-colors"
+              animate={{ opacity: isPlaying && isHovered ? 0 : 1 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 z-30 flex items-center justify-center"
             >
-              <Play className="w-8 h-8 text-foreground ml-1" fill="currentColor" />
+              <div className="w-20 h-20 rounded-full glass-card bg-primary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <Play
+                  className="w-8 h-8 text-foreground ml-1"
+                  fill="currentColor"
+                />
+              </div>
             </motion.div>
-          </motion.div>
-
-          {/* Decorative elements */}
-          <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-secondary/10 rounded-full blur-2xl" />
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className={`space-y-4 ${index % 2 === 1 ? "md:order-1 md:text-right" : ""}`}>
-        <div className={`flex items-center gap-4 text-sm text-muted-foreground ${
-          index % 2 === 1 ? "md:justify-end" : ""
-        }`}>
-        </div>
-
+      
+      <div
+        className={`space-y-4 ${
+          index % 2 === 1 ? "md:order-1 md:text-right" : ""
+        }`}
+      >
         <h3 className="font-heading text-2xl md:text-3xl font-bold text-foreground">
           {video.title}
         </h3>
