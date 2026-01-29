@@ -54,7 +54,6 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
-  
   const handleMouseEnter = () => {
     if (window.innerWidth < 768) return;
     setIsHovered(true);
@@ -71,7 +70,6 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
     setIsPlaying(false);
   };
 
-  
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -96,10 +94,13 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
     return () => observer.disconnect();
   }, []);
 
-  const toggleSound = () => {
+  
+  const toggleSound = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     if (!videoRef.current) return;
-    videoRef.current.muted = !videoRef.current.muted;
-    setIsMuted(videoRef.current.muted);
+    const nextMuted = !videoRef.current.muted;
+    videoRef.current.muted = nextMuted;
+    setIsMuted(nextMuted);
   };
 
   const getAspectRatioClass = (ratio: string) => {
@@ -115,7 +116,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
 
   return (
     <motion.div
-      onClick={toggleSound}
+      onClick={() => toggleSound()} 
       ref={containerRef}
       initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
       whileInView={{ opacity: 1, x: 0 }}
@@ -125,7 +126,6 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
         index % 2 === 1 ? "md:flex-row-reverse" : ""
       }`}
     >
-    
       <div className={`group ${index % 2 === 1 ? "md:order-2" : ""}`}>
         <div
           onMouseEnter={handleMouseEnter}
@@ -142,7 +142,6 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
               video.aspectRatio
             )} rounded-2xl overflow-hidden bg-black`}
           >
-            
             {!isPlaying && (
               <Image
                 src={video.thumbnail}
@@ -153,7 +152,6 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
               />
             )}
 
-            
             <video
               ref={videoRef}
               src={video.videoUrl}
@@ -166,10 +164,8 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
               }`}
             />
 
-            
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-20" />
 
-            
             <motion.div
               animate={{ opacity: isPlaying && isHovered ? 0 : 1 }}
               transition={{ duration: 0.3 }}
@@ -183,11 +179,10 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
               </div>
             </motion.div>
 
-            
             {isPlaying && (
               <button
-                onClick={toggleSound}
-                className="absolute top-3 right-3 z-40 p-2 rounded-full bg-black/60"
+                onClick={(e) => toggleSound(e)}
+                className="absolute top-3 right-3 z-40 p-2 rounded-full bg-black/60 hover:bg-black/80 transition-colors"
               >
                 {isMuted ? (
                   <VolumeX className="w-4 h-4 text-white" />
@@ -200,7 +195,6 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
         </div>
       </div>
 
-      
       <div
         className={`space-y-4 ${
           index % 2 === 1 ? "md:order-1 md:text-right" : ""

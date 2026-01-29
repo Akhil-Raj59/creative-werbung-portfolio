@@ -26,7 +26,6 @@ export function VideoCard({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
-  
   const handleMouseEnter = () => {
     if (window.innerWidth < 768) return;
     videoRef.current?.play().catch(() => {});
@@ -41,7 +40,6 @@ export function VideoCard({
     setIsPlaying(false);
   };
 
-  
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -67,15 +65,18 @@ export function VideoCard({
   }, []);
 
   
-  const toggleMute = () => {
+  const toggleMute = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation(); 
     if (!videoRef.current) return;
-    videoRef.current.muted = !videoRef.current.muted;
-    setIsMuted(videoRef.current.muted);
+    
+    const nextMuted = !videoRef.current.muted;
+    videoRef.current.muted = nextMuted;
+    setIsMuted(nextMuted);
   };
 
   return (
     <motion.div
-      onClick={toggleMute}
+      onClick={() => toggleMute()} 
       ref={containerRef}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -97,7 +98,6 @@ export function VideoCard({
         />
       )}
 
-      
       <video
         ref={videoRef}
         src={videoUrl}
@@ -110,10 +110,8 @@ export function VideoCard({
         }`}
       />
 
-    
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
 
-      
       {!isPlaying && (
         <div className="absolute inset-0 z-20 flex items-center justify-center">
           <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center">
@@ -122,11 +120,10 @@ export function VideoCard({
         </div>
       )}
 
-      
       {isPlaying && (
         <button
-          onClick={toggleMute}
-          className="absolute top-3 right-3 z-30 p-2 rounded-full bg-black/60"
+          onClick={(e) => toggleMute(e)} 
+          className="absolute top-3 right-3 z-30 p-2 rounded-full bg-black/60 hover:bg-black/80 transition-colors"
         >
           {isMuted ? (
             <VolumeX className="w-4 h-4 text-white" />
@@ -136,7 +133,6 @@ export function VideoCard({
         </button>
       )}
 
-      
       <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
         <span className="text-[11px] uppercase tracking-widest text-primary">
           {category}

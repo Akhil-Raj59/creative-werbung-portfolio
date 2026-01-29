@@ -84,7 +84,6 @@ function MotionCard({
     setIsPlaying(false);
   };
 
-  
   const handleMouseEnter = () => {
     if (window.innerWidth < 768) return;
     setIsHovered(true);
@@ -97,7 +96,6 @@ function MotionCard({
     resetVideo();
   };
 
-  
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -113,8 +111,9 @@ function MotionCard({
     return () => observer.disconnect();
   }, []);
 
-  
-  const toggleSound = () => {
+
+  const toggleSound = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation(); 
     if (!videoRef.current) return;
     videoRef.current.muted = !videoRef.current.muted;
     setIsMuted(videoRef.current.muted);
@@ -122,7 +121,7 @@ function MotionCard({
 
   return (
     <motion.div
-      onClick={toggleSound}
+      onClick={() => toggleSound()} 
       ref={containerRef}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -130,7 +129,6 @@ function MotionCard({
       transition={{ duration: 0.6, delay: index * 0.12 }}
       className="group"
     >
-      
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -142,7 +140,6 @@ function MotionCard({
         "
       >
         <div className="absolute inset-0 rounded-2xl overflow-hidden bg-black">
-          
           {!isPlaying && (
             <Image
               src={item.thumbnail}
@@ -153,7 +150,6 @@ function MotionCard({
             />
           )}
 
-          
           <video
             ref={videoRef}
             src={item.videoUrl}
@@ -166,10 +162,8 @@ function MotionCard({
             }`}
           />
 
-          
           <div className="absolute inset-0 z-20 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
-          
           <motion.div
             animate={{ opacity: isPlaying ? 0 : 1 }}
             transition={{ duration: 0.25 }}
@@ -183,11 +177,10 @@ function MotionCard({
             </div>
           </motion.div>
 
-        
           {isPlaying && (
             <button
-              onClick={toggleSound}
-              className="absolute top-3 right-3 z-40 p-2 rounded-full bg-black/60"
+              onClick={(e) => toggleSound(e)} 
+              className="absolute top-3 right-3 z-40 p-2 rounded-full bg-black/60 hover:bg-black/80 transition-colors"
             >
               {isMuted ? (
                 <VolumeX className="w-4 h-4 text-white" />
@@ -199,7 +192,6 @@ function MotionCard({
         </div>
       </div>
 
-      
       <div className="flex items-start justify-between">
         <div>
           <h3 className="font-heading text-lg font-bold mb-1 group-hover:text-primary transition-colors">
@@ -210,8 +202,6 @@ function MotionCard({
             {item.client}
           </p>
         </div>
-
-        
       </div>
     </motion.div>
   );
