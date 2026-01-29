@@ -211,12 +211,7 @@ function MotionCard({
           </p>
         </div>
 
-        <motion.div
-          whileHover={{ rotate: 45 }}
-          className="w-10 h-10 rounded-full glass-card flex items-center justify-center"
-        >
-          →
-        </motion.div>
+        
       </div>
     </motion.div>
   );
