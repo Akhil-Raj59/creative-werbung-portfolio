@@ -2,16 +2,15 @@
 
 import { motion } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
-import { Play } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 const longformData = [
   {
     title: "Behind The Brand: Journey of Innovation",
     description:
       "A cinematic documentary exploring the creative process behind a leading tech startup's journey from garage to global.",
-    duration: "12:45",
-    date: "2024",
     thumbnail: "/assets/long/thumbnails/long-2.jpg",
     videoUrl: "/assets/long/long-1.mp4",
     aspectRatio: "16:9",
@@ -20,8 +19,6 @@ const longformData = [
     title: "The Art of Sustainable Fashion",
     description:
       "Exploring how modern fashion brands are revolutionizing the industry with eco-conscious production methods.",
-    duration: "18:30",
-    date: "2024",
     thumbnail: "/assets/long/thumbnails/long-1.jpg",
     videoUrl: "/assets/long/long-2.mp4",
     aspectRatio: "16:9",
@@ -55,6 +52,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   
   const handleMouseEnter = () => {
@@ -91,12 +89,18 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
           setIsPlaying(false);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.55 }
     );
 
     observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
+
+  const toggleSound = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !videoRef.current.muted;
+    setIsMuted(videoRef.current.muted);
+  };
 
   const getAspectRatioClass = (ratio: string) => {
     const map: Record<string, string> = {
@@ -111,6 +115,7 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
 
   return (
     <motion.div
+      onClick={toggleSound}
       ref={containerRef}
       initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
       whileInView={{ opacity: 1, x: 0 }}
@@ -120,19 +125,18 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
         index % 2 === 1 ? "md:flex-row-reverse" : ""
       }`}
     >
-      
+    
       <div className={`group ${index % 2 === 1 ? "md:order-2" : ""}`}>
         <div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className={`
+          className="
             relative cursor-pointer
             transition-all duration-500 ease-out
             group-hover:scale-[1.05]
             group-hover:shadow-[0_0_70px_rgba(99,102,241,0.55)]
-          `}
+          "
         >
-          
           <div
             className={`relative ${getAspectRatioClass(
               video.aspectRatio
@@ -140,9 +144,12 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
           >
             
             {!isPlaying && (
-              <div
-                className="absolute inset-0 z-10 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: `url(${video.thumbnail})` }}
+              <Image
+                src={video.thumbnail}
+                alt={video.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
             )}
 
@@ -151,7 +158,9 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
               ref={videoRef}
               src={video.videoUrl}
               loop
+              muted={isMuted}
               playsInline
+              preload="metadata"
               className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
                 isHovered ? "scale-105" : "scale-100"
               }`}
@@ -173,6 +182,20 @@ function LongFormCard({ video, index }: { video: any; index: number }) {
                 />
               </div>
             </motion.div>
+
+            
+            {isPlaying && (
+              <button
+                onClick={toggleSound}
+                className="absolute top-3 right-3 z-40 p-2 rounded-full bg-black/60"
+              >
+                {isMuted ? (
+                  <VolumeX className="w-4 h-4 text-white" />
+                ) : (
+                  <Volume2 className="w-4 h-4 text-white" />
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>

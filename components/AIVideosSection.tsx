@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
-import { Play, Cpu, Zap, Bot } from "lucide-react";
+import { Play, Cpu, Zap, Bot, Volume2, VolumeX } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
 type AIVideoItem = {
@@ -26,7 +26,7 @@ const aiData: AIVideoItem[] = [
     description: "Artistic video transformation using AI",
     icon: Zap,
     thumbnail: "/assets/ai/thumbnails/thumbnail-reel.jpg",
-    videoUrl: "/assets/ai/ai-reel.mp4", 
+    videoUrl: "/assets/ai/ai-reel.mp4",
   },
   {
     title: "AI Avatar Presentation",
@@ -54,7 +54,6 @@ const aiData: AIVideoItem[] = [
 export default function AIVideosSection() {
   return (
     <section id="ai" className="section-padding relative overflow-hidden">
-    
       <div className="absolute inset-0 bg-gradient-to-b from-background via-accent/5 to-background" />
 
       <div className="container mx-auto relative z-10">
@@ -84,11 +83,12 @@ function AIVideoCard({
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const isReel = item.videoUrl.includes("reel"); 
+  const isReel = item.videoUrl.includes("reel");
 
   const playVideo = () => {
     videoRef.current?.play().catch(() => {});
@@ -99,6 +99,13 @@ function AIVideoCard({
     if (!videoRef.current) return;
     videoRef.current.pause();
     setIsPlaying(false);
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
   };
 
   
@@ -132,6 +139,7 @@ function AIVideoCard({
 
   return (
     <motion.div
+    onClick={toggleMute}
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
@@ -151,19 +159,16 @@ function AIVideoCard({
           group-hover:shadow-[0_0_40px_rgba(99,102,241,0.45)]
           ${
             isReel
-              ? "aspect-[9/10]" 
+              ? "aspect-[9/10]"
               : index === 0
               ? "aspect-[2/1]"
               : "aspect-[3/2]"
           }
         `}
       >
-      
+        
         {!isPlaying && (
           <motion.div
-            initial={{ scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.6 }}
             className="absolute inset-0 bg-cover bg-center z-10"
             style={{ backgroundImage: `url(${item.thumbnail})` }}
           />
@@ -174,26 +179,25 @@ function AIVideoCard({
           ref={videoRef}
           src={item.videoUrl}
           loop
+          muted={isMuted}
           playsInline
+          preload="metadata"
           className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
             isHovered ? "scale-105" : "scale-100"
           }`}
         />
 
-       
+        
+        <button
+          onClick={toggleMute}
+          className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/60 text-white backdrop-blur"
+        >
+          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
 
         
         <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
-          <div className="flex justify-between items-start">
-            {/* <motion.div
-              whileHover={{ rotate: 180 }}
-              transition={{ duration: 0.5 }}
-              className="w-12 h-12 rounded-xl glass-card flex items-center justify-center"
-            >
-              
-            </motion.div> */}
-          </div>
-
+          <div />
           <div>
             <h3 className="font-heading text-xl md:text-2xl font-bold text-foreground mb-2">
               {item.title}
