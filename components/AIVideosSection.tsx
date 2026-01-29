@@ -26,7 +26,7 @@ const aiData: AIVideoItem[] = [
     description: "Artistic video transformation using AI",
     icon: Zap,
     thumbnail: "/assets/ai/thumbnails/thumbnail-reel.jpg",
-    videoUrl: "/assets/ai/ai-reel.mp4", // 👈 REEL
+    videoUrl: "/assets/ai/ai-reel.mp4", 
   },
   {
     title: "AI Avatar Presentation",
@@ -137,17 +137,21 @@ function AIVideoCard({
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`group relative ${
-        index === 0 && !isReel ? "md:col-span-2 lg:col-span-2" : ""
-      }`}
+      className={`group relative
+        ${isReel ? "hidden md:block" : ""}
+        ${index === 0 && !isReel ? "md:col-span-2 lg:col-span-2" : ""}
+      `}
     >
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className={`relative rounded-2xl overflow-hidden cursor-pointer bg-black
+          transition-all duration-500
+          group-hover:scale-[1.05]
+          group-hover:shadow-[0_0_40px_rgba(99,102,241,0.45)]
           ${
             isReel
-              ? "aspect-[9/10]" // 🎯 REEL ONLY
+              ? "aspect-[9/10]" 
               : index === 0
               ? "aspect-[2/1]"
               : "aspect-[3/2]"

@@ -74,7 +74,7 @@ const reelsData = [
     category: "Wellness",
     views: "423K",
     likes: "29K",
-    thumbnail: "/assets/reels/thumbnails/reel%208.jpg",
+    thumbnail: "/assets/reels/thumbnails/reel%209.jpg",
     videoUrl: "/assets/reels/reel-9.mp4"
   },
   {
@@ -82,7 +82,7 @@ const reelsData = [
     category: "Tech",
     views: "1.8M",
     likes: "98K",
-    thumbnail: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=400&h=700&fit=crop",
+    thumbnail: "/assets/reels/thumbnails/reel%2010.jpg",
     videoUrl: "/assets/reels/reel-11.mp4"
   },
   
