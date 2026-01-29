@@ -212,7 +212,7 @@ function AIVideoCard({
         >
           <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center animate-pulse-glow">
             <Play
-              className="w-6 h-6 text-foreground ml-1"
+              className="w-6 h-6 text-primary-foreground ml-1"
               fill="currentColor"
             />
           </div>

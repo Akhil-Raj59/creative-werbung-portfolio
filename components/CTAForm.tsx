@@ -241,7 +241,7 @@ export default function CTAForm() {
                         </FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 border-primary focus:ring-0">
+                            <SelectTrigger className="w-full h-12 bg-transparent border-0 border-b border-border/50 rounded-none px-0 border-primary focus:ring-0">
                               <SelectValue placeholder="Select project type" />
                             </SelectTrigger>
                           </FormControl>
@@ -259,25 +259,26 @@ export default function CTAForm() {
                   />
 
                   
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-muted-foreground">
-                          Project Brief
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Tell us about your project..."
-                            {...field}
-                            className="min-h-[100px] bg-transparent border-0 border-b border-border/50 rounded-none px-0 border-primary focus-visible:ring-0 transition-colors resize-none"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2 w-full">
+                      <FormLabel className="text-sm font-medium text-muted-foreground">
+                        Project Brief
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Tell us about your project..."
+                          {...field}
+                          className="min-h-[120px] w-full bg-transparent border-0 border-b border-border/50 rounded-none px-0 border-primary focus-visible:ring-0 resize-none block"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
 
                   
                   <div className="pt-6">
@@ -326,7 +327,7 @@ export default function CTAForm() {
           </div>
 
           <p className="text-sm text-muted-foreground">
-            © 2026 Kreative Werbung Labs. All rights reserved.
+            © {new Date().getFullYear()} Kreative Werbung Labs. All rights reserved.
           </p>
         </motion.div>
       </div>

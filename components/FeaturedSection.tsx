@@ -184,7 +184,7 @@ function FeaturedProject({ project, index }: { project: any; index: number }) {
               whileHover={{ scale: 1.1 }}
               className="w-24 h-24 rounded-full glass-card bg-primary flex items-center justify-center group-hover:bg-secondary/30 transition-colors glow-primary"
             >
-              <Play className="w-10 h-10 text-foreground ml-1" fill="currentColor" />
+              <Play className="w-10 h-10 text-primary-foreground ml-1" fill="currentColor" />
             </motion.div>
           </motion.div>
 
