@@ -1,0 +1,31 @@
+when:
+  event:
+    - push
+
+steps:
+  build:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker build -t creative-portfolio:latest .
+
+  redeploy:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - |
+        docker service update \
+          --env-add SPREADSHEET_ID="${SPREADSHEET_ID}" \
+          --env-add GOOGLE_SERVICE_ACCOUNT_EMAIL="${GOOGLE_SERVICE_ACCOUNT_EMAIL}" \
+          --env-add GOOGLE_PRIVATE_KEY="${GOOGLE_PRIVATE_KEY}" \
+          --force creative_portfolio
+
+  cleanup:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker container prune -f
+      - docker image prune -af
